@@ -5,12 +5,16 @@ use rand::{rngs::OsRng, RngCore};
 #[derive(Clone)]
 pub(crate) struct EncryptionService {
     cipher: Aes256Gcm,
+    pub jwt_secret: String,
 }
 
 impl EncryptionService {
     pub fn new(key: &[u8; 32]) -> Self {
         let cipher = Aes256Gcm::new_from_slice(key).expect("Valid key length");
-        Self { cipher }
+        Self {
+            cipher,
+            jwt_secret: "your-secret-key".to_string(),
+        }
     }
 
     pub fn encrypt(&self, data: &str) -> Result<(String, String), Box<dyn std::error::Error>> {
